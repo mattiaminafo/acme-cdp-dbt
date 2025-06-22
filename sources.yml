@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw_shopify
+    database: "{{ target.project }}"
+    schema: raw_shopify
+    tables:
+      - name: orders
