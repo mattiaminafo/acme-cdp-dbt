@@ -23,4 +23,3 @@ with
 
 select *
 from base
-;
