@@ -1,8 +1,9 @@
 version: 2
 
 sources:
-  - name: raw_shopify
-    database: "{{ target.project }}"
-    schema: raw_shopify
+  - name: raw_shopify          # alias che userai in {{ source() }}
+    database: "{{ target.project }}"   # il progetto GCP attivo
+    schema: raw_shopify                # dataset creato da Airbyte
     tables:
-      - name: orders
+      - name: orders                   # tabella sorgente
+        description: "Shopify orders raw table ingested via Airbyte"
