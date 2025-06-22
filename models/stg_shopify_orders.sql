@@ -1,26 +1,27 @@
 {{
-  config(
-    materialized        = 'incremental',
-    partition_by        = { "field": "order_date", "data_type": "date" },
-    incremental_strategy = 'insert_overwrite'
-  )
+    config(
+        materialized="incremental",
+        partition_by={"field": "order_date", "data_type": "date"},
+        incremental_strategy="insert_overwrite",
+    )
 }}
 
-WITH base AS (
+with
+    base as (
 
-    SELECT
-        DATE(updated_at)         AS order_date,
-        id                       AS order_id,      -- colonna esatta di Shopify
-        email,
-        total_price              AS amount_usd,
-        updated_at
-    FROM {{ source('raw_shopify', 'orders') }}
+        select
+            date(updated_at) as order_date,
+            id as order_id,  -- colonna esatta di Shopify
+            email,
+            total_price as amount_usd,
+            updated_at
+        from {{ source("raw_shopify", "orders") }}
 
-    {% if is_incremental() %}
-      WHERE updated_at >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
-    {% endif %}
+        {% if is_incremental() %}
+            where updated_at >= timestamp_sub(current_timestamp(), interval 7 day)
+        {% endif %}
 
-)
+    )
 
-SELECT *
-FROM base
+select *
+from base
